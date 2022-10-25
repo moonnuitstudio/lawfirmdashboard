@@ -1,8 +1,19 @@
 import { Outlet } from 'react-router-dom'
 
 import { useState } from 'react';
+
 import DrawerHorizontalMenu from '../components/GUI/DrawerHorizontalMenu';
-import { ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import DrawerMenu from '../components/GUI/menu/DrawerMenu';
+
+import WorkIcon from '@mui/icons-material/Work';
+
+const items = [
+  { 
+    title: 'Matters',
+    icon: <WorkIcon />,
+    url: 'matters'
+  }
+]
 
 const DashboardLayout = () => {
   const [open, setOpen] = useState(false)
@@ -17,9 +28,9 @@ const DashboardLayout = () => {
 
   return (
     <>
-      <DrawerHorizontalMenu open={open} closeMenu={handleDrawerClose} openMenu={handleDrawerOpen} title="TEST" width={300}>
+      <DrawerMenu open={open} closeMenu={handleDrawerClose} openMenu={handleDrawerOpen} title={import.meta.env.VITE_APP_TITLE} width={300} items={items}>
         <Outlet />
-      </DrawerHorizontalMenu>
+      </DrawerMenu>
     </>
   )
 }

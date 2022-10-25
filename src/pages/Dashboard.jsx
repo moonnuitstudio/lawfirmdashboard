@@ -1,8 +1,7 @@
-import React from 'react'
 
 const Dashboard = () => {
   return (
-    <div>Dashboard</div>
+    <div>{import.meta.env.VITE_APP_TITLE}</div>
   )
 }
 
