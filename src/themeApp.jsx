@@ -46,6 +46,7 @@ const themeApp = createTheme({
       MuiToolbar: {
         styleOverrides: {
           root: {
+            minHeight: '45px !important',
             "& .tablePageTitle":{
               fontFamily: "Nunito Sans, sans-serif",
               fontWeight: 700,
@@ -89,7 +90,7 @@ const themeApp = createTheme({
       MuiListItemButton: {
         styleOverrides: {
           root: {
-            padding: '15px 30px',
+            padding: '10px 30px',
             color: '#8C8C8C',
             transition: 'all 0.3s linear',
             '& .MuiListItemIcon-root': {

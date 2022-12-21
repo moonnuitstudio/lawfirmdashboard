@@ -20,18 +20,11 @@ const EnhancedTableHead = ({ onSelectAllClick, order, orderBy, numSelected, rowC
     const createSortHandler = (property) => (event) => { onRequestSort(event, property); };
     
     const isSelectedAll = useMemo(() => (rowCount > 0 && numSelected === rowCount), [rowCount, numSelected ])
-
+    
     return (
         <TableHead className='pageTable'>
-          <TableRow>
-            <TableCell padding="checkbox">
-              {/* <Checkbox
-                color="primary"
-                indeterminate={numSelected > 0 && numSelected < rowCount}
-                checked={rowCount > 0 && numSelected === rowCount}
-                onChange={onSelectAllClick}
-              /> */}
-
+          <TableRow sx={{ pb:{sm: 0} }}>
+            <TableCell padding="checkbox"  sx={{ px: 'auto', verticalAlign: 'bottom' }}>
               <IconButton onClick={() => onSelectAllClick(isSelectedAll)}>
                 {(isSelectedAll)? (<DeselectIcon />) : (<SelectAllIcon />)}
               </IconButton>
@@ -42,6 +35,7 @@ const EnhancedTableHead = ({ onSelectAllClick, order, orderBy, numSelected, rowC
                 align={headCell.numeric ? 'right' : 'left'}
                 padding={headCell.disablePadding ? 'none' : 'normal'}
                 sortDirection={orderBy === headCell.id ? order : false}
+                sx={{ py:{sm: 1}, pl: 0 }}
               >
                 <TableSortLabel
                   active={orderBy === headCell.id}

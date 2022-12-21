@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { 
@@ -15,6 +15,7 @@ import {
 
 import EnhancedTableHead from './EnhancedTableHead';
 import EnhancedTableToolbar from './EnhancedTableToolbar';
+import ClickMenu from '../menu/ClickMenu';
 
 // Functions
 function descendingComparator(a, b, orderBy) {
@@ -48,6 +49,8 @@ const FilterTable = ({header, rows, tableSort, title, selectAllLabel, maxRows, d
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(maxRows);
+
+  const rowRef = useRef(null)
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -96,83 +99,88 @@ const FilterTable = ({header, rows, tableSort, title, selectAllLabel, maxRows, d
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2, border: '1px solid #BFBFBF' }} elevation={0}>
-        <EnhancedTableToolbar numSelected={selected.length} tableTitle={title} />
-        <TableContainer elevation={0}>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size='medium'
-            elevation={0}
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-              headerCells={header}
-              selectAllLabel={selectAllLabel}
-            />
-            <TableBody>
-              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                 rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+    <>
+      <Box sx={{ width: '100%' }}>
+        <Paper sx={{ width: '100%', mb: 2, border: '1px solid #BFBFBF' }} elevation={0}>
+          <EnhancedTableToolbar numSelected={selected.length} tableTitle={title} />
+          <TableContainer elevation={0}>
+            <Table
+              sx={{ minWidth: 750 }}
+              aria-labelledby="tableTitle"
+              size='medium'
+              elevation={0}
+            >
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={rows.length}
+                headerCells={header}
+                selectAllLabel={selectAllLabel}
+              />
+              <TableBody>
+                {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+                  rows.slice().sort(getComparator(order, orderBy)) */}
+                {stableSort(rows, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const isItemSelected = isSelected(row.id);
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row.id)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.id}
-                      selected={isItemSelected}
-                      className="no-border cursor-pointer p-4"
-                    >
-                      <TableCell padding="checkbox" sx={{borderBottom: 'none !important'}}>
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
-                      </TableCell>
-                      {createTableCell(labelId, row)}
-                      
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: 62 * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
-    </Box>
+                    return (
+                      <TableRow
+                        hover
+                        
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.id}
+                        selected={isItemSelected}
+                        className="no-border cursor-pointer p-4"
+                      >
+                        <TableCell padding="checkbox" sx={{borderBottom: 'none !important'}}>
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                              'aria-labelledby': labelId,
+                            }}
+                            onClick={(event) => handleClick(event, row.id)}
+                          />
+                        </TableCell>
+                        {createTableCell(labelId, row, rowRef)}
+                        
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow
+                    style={{
+                      height: 62 * emptyRows,
+                    }}
+                  >
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      </Box>
+
+      <ClickMenu refcontainer={rowRef} />
+    </>
   );
 }
 

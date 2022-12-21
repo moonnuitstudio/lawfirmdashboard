@@ -15,8 +15,10 @@ import GrainIcon from '@mui/icons-material/Grain';
 const EnhancedTableToolbar = ({numSelected, tableTitle}) => {
     return (
         <Toolbar sx={{
-            pl: { sm: 2 },
+            pl: { sm: 1.3 },
             pr: { xs: 1, sm: 1 },
+            pt: { sm: 1 },
+            pb: { sm: .5 },
             ...(numSelected > 0 && {
               bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
             }),
@@ -28,6 +30,7 @@ const EnhancedTableToolbar = ({numSelected, tableTitle}) => {
               color="inherit"
               variant="subtitle1"
               component="div"
+              fontSize="17px !important"
             >
               {numSelected} elements selected
             </Typography>
@@ -38,8 +41,9 @@ const EnhancedTableToolbar = ({numSelected, tableTitle}) => {
               id="tableTitle"
               component="div"
               className='tablePageTitle'
+              fontSize="22px !important"
             >
-              <GrainIcon /> {tableTitle}
+              <GrainIcon fontSize='small'/> {tableTitle}
             </Typography>
           )}
     

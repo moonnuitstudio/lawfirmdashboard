@@ -1,33 +1,38 @@
-import { mattersTableHeader } from '../values/tableHeaders';
-import { matterTestRows } from '../values/tableTestRows';
-
 import FilterTable from '../components/GUI/table/FilterTable';
 
 import { 
   TableCell,
 } from '@mui/material'
 
-const MattersPage = () => {
+import useMatters from '../hooks/useMatters';
 
-  const createTableCell = (labelId, row) => (
+import { useEffect, useState } from 'react';
+
+import { formatDate } from '../helpers';
+
+const MattersPage = () => {
+  const { matters, columnNames } = useMatters()
+  
+  const createTableCell = (labelId, row, rowRef) => (
     <>
       <TableCell 
         component="th"
         id={labelId}
         scope="row"
         padding="none"
+        ref={rowRef}
       >
-        {row.mattername}
+        {row.title}
       </TableCell>
-      <TableCell align="right">{row.clientname}</TableCell>
-      <TableCell align="right">{row.phone}</TableCell>
-      <TableCell align="right">{row.email}</TableCell>
+      <TableCell align="right" sx={{ whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", maxWidth:"65ch" }}>{row.description}</TableCell>
+      <TableCell align="right">{formatDate(row.created_at)}</TableCell>
+      <TableCell align="right">{formatDate(row.updated_at)}</TableCell>
     </>
   )
 
   return (
     <>
-      <FilterTable header={mattersTableHeader} rows={matterTestRows} title='Matters' selectAllLabel="Selected All Matters" maxRows={10} defaultColumnPivot="fat" createTableCell={createTableCell} />
+      <FilterTable header={columnNames} rows={matters} title='Matters' selectAllLabel="Selected All Matters" maxRows={10} defaultColumnPivot="fat" createTableCell={createTableCell} />
     </>
   );
 }

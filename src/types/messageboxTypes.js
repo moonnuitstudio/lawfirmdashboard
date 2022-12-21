@@ -1,0 +1,1 @@
+export const SHOW_ERR_MESSAGE="SHOW_ERR_MESSAGE"

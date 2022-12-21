@@ -1,0 +1,2 @@
+export const CLICK_MENU_SHOW="CLICK_MENU_SHOW"
+export const CLICK_MENU_HIDE="CLICK_MENU_HIDE"

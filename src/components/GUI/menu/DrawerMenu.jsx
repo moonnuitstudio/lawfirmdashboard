@@ -20,6 +20,8 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 
+import useDocketwise from '../../../hooks/useDocketwise';
+
 const openedMixin = (theme, width) => ({
     width: width,
     transition: theme.transitions.create('width', {
@@ -47,6 +49,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
+    minHeight: '45px !important',
 }))
 
 const AppBar = styled(MuiAppBar, {
@@ -97,8 +100,10 @@ const DrawerMenu = ({open, closeMenu, openMenu, width, items, children, title}) 
     const theme = useTheme();
     const navigate = useNavigate()
 
+    const { isAuth } = useDocketwise()
+
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', padding: 0 }}>
             <AppBar position="fixed" open={open} componentWidth={width} elevation={0} sx={{borderBottom: '1px solid rgba(0, 0, 0, 0.12)'}}>
                 <Toolbar>
                     <IconButton
@@ -115,7 +120,7 @@ const DrawerMenu = ({open, closeMenu, openMenu, width, items, children, title}) 
                         <MenuIcon />
                     </IconButton>
                     
-                    <Typography variant="h6" noWrap component="div" sx={{color: 'black'}}>
+                    <Typography variant="h6" noWrap component="div" sx={{color: 'black', fontSize: '16px'}}>
                         {title}
                     </Typography>
                 </Toolbar>
@@ -126,11 +131,10 @@ const DrawerMenu = ({open, closeMenu, openMenu, width, items, children, title}) 
                     {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                 </IconButton>
             </DrawerHeader>
-            <List>
-                {items.map(item => (
+            <List sx={{paddingTop: '0px !important'}}>
+                {items.filter(item => !item.auth || isAuth).map(item => (
                     <ListItem key={item.title} disablePadding sx={{ display: 'block' }}>
                         <ListItemButton onClick={() => navigate(`/${item.url}`)} sx={{
-                            minHeight: 48,
                             justifyContent: open ? 'initial' : 'center',
                             px: 2.5,
                             }}
@@ -139,11 +143,10 @@ const DrawerMenu = ({open, closeMenu, openMenu, width, items, children, title}) 
                                 minWidth: 0,
                                 mr: open ? 3 : 'auto',
                                 justifyContent: 'center',
-                                }}
-                            >
+                                }}>
                                 {item.icon}
                             </ListItemIcon>
-                            <ListItemText primary={item.title} primaryTypographyProps={{fontSize: '1rem', textTransform: 'uppercase'}} sx={{ opacity: open ? 1 : 0 }} />
+                            <ListItemText primary={item.title} primaryTypographyProps={{fontSize: '.84rem', textTransform: 'uppercase'}} sx={{ opacity: open ? 1 : 0 }} />
                         </ListItemButton>
                     </ListItem>
                 ))}
@@ -158,7 +161,7 @@ const DrawerMenu = ({open, closeMenu, openMenu, width, items, children, title}) 
 }
 
 DrawerMenu.defaultProps = {
-    width: 300,
+    width: 220,
 }  
 
 export default DrawerMenu
